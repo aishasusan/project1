@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService {
 		return user;
 
 	}
+	
+	public List<User> getUsers(){
+		return userRepo.findAll();
+	}
 
 	public Boolean deleteByUserId(Integer id) throws UserNotFoundException {
 		if (!(userRepo.findById(id).isPresent())) {
@@ -48,8 +52,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User saveUser(User user) throws UserExistsException {
-		User savedUser = userRepo.save(user);
-		return savedUser;
+		
+		if(userRepo.findById(user.getId()).isPresent())
+		{
+			throw new UserExistsException();
+		}
+		return userRepo.save(user);
+		
 	}
 
 //	public User updateByUserId(User user,Integer id) throws UserNotFoundException {

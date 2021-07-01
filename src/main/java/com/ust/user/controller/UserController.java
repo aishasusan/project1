@@ -2,6 +2,8 @@ package com.ust.user.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,14 +46,13 @@ public class UserController {
 	@PutMapping("/create-user")
 	@ApiOperation(value = "adding user")
 	public ResponseEntity<?> saveUser(@RequestBody User user) {
-
+		
 		try {
-			return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.OK);
+			return new ResponseEntity<User>(userService.saveUser(user),HttpStatus.OK);
 		} catch (UserExistsException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
 		}
-
-	}
+			}
 
 	@GetMapping("/retrieve-user/{id}")
 	@ApiOperation(value = "to get all user")
@@ -86,6 +87,13 @@ public class UserController {
 		} catch (UserNotFoundException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+	
+	@GetMapping("/alluser")
+	public ResponseEntity<List<User>> getUser() {
+
+		return new ResponseEntity<List<User>>(userService.getUsers(), HttpStatus.OK);
+
 	}
 
 }

@@ -23,4 +23,6 @@ public interface UserService {
 	public Boolean deleteByUserId(Integer id)throws UserNotFoundException;
 
 	List<User> getAllUser()throws UserInvalid;
+	
+	public List<User> getUsers();
 }

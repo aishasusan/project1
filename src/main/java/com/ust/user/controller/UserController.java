@@ -72,7 +72,7 @@ public class UserController {
 				return new ResponseEntity<String>("user deleted", HttpStatus.OK);
 			}
 		} catch (UserNotFoundException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.EXPECTATION_FAILED );
 		}
 		
 		return new ResponseEntity<String>("User not deleted", HttpStatus.OK);

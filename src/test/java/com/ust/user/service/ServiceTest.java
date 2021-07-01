@@ -91,7 +91,6 @@ class ServiceTest {
 		when(userRepo.findById(user.getId())).thenReturn(optional);
 		Boolean deletedBlog = userService.deleteByUserId(1);
 		assertEquals(true, deletedBlog.booleanValue());
-
 		verify(userRepo, times(1)).findById(user.getId());
 		verify(userRepo, times(1)).deleteById(user.getId());
 	}
@@ -105,15 +104,22 @@ class ServiceTest {
 
 	}
 	
+
 	@Test
-    public void givenBlogToUpdateThenShouldReturnUpdatedBlog() throws UserNotFoundException {
-        when(userRepo.existsById(user.getId())).thenReturn(true);
+    public void givenUserToUpdateThenShouldReturnUpdatedUser() throws UserNotFoundException {
+        when(userRepo.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepo.save(user)).thenReturn(user);
+        user.setId(1);
         user.setRole_id(1);
-        User user1 = userService.updateByUserId(1,user);
+        user.setCreated_date("2020-12-12");
+        user.setUpdate_date("2020-12-12");
+        User user1 = userService.updateByUserId(user.getId(), user);
+        assertEquals(user1.getId(), 1);
         assertEquals(user1.getRole_id(), 1);
+        assertEquals(user1.getCreated_date(), "2020-12-12");
+        assertEquals(user1.getUpdate_date(), "2020-12-12");
         verify(userRepo, times(1)).save(user);
-        verify(userRepo, times(1)).existsById(user.getId());
+        verify(userRepo, times(1)).findById(user.getId());
     }
 
     @Test
@@ -121,7 +127,6 @@ class ServiceTest {
         when(userRepo.existsById(user.getId())).thenReturn(false);
         Assertions.assertThrows(UserNotFoundException.class, () ->
                 userService.updateByUserId(1, user));
-        verify(userRepo, times(1)).existsById(user.getId());
     }
 
 

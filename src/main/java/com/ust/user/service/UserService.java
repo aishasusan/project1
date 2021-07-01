@@ -18,9 +18,9 @@ public interface UserService {
 
 	public User getUserById(Integer id) throws UserNotFoundException;
 
-	public User updateByUserId(Integer id) throws IncompleteDetailsException, UserNotFoundException ;
+	public User updateByUserId(Integer id, User user) throws UserNotFoundException ;
 
-	public User deleteByUserId(Integer id)throws UserNotFoundException;
+	public Boolean deleteByUserId(Integer id)throws UserNotFoundException;
 
 	List<User> getAllUser()throws UserInvalid;
 }

@@ -2,6 +2,7 @@ package com.ust.user.service;
 
 import java.util.List;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +20,15 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepo;
 
-	@Autowired
-	public UserServiceImpl(UserRepository userRepo) {
-		this.userRepo = userRepo;
-	}
-
-
-	
 	public List<User> getAllUser() throws UserInvalid {
 		if (!(userRepo.exists(null))) {
 			throw new UserInvalid("User Doesn't Exists!!!!!!!!!!");
 		}
 		return userRepo.findAll();
-
-}
-
+	}
 
 	public User getUserById(Integer id) throws UserNotFoundException {
-		
+
 		if (!(userRepo.findById(id).isPresent())) {
 			throw new UserNotFoundException("User Doesn't Exists!!!!!!!!!!");
 		}
@@ -46,21 +38,14 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	
-	public User deleteByUserId(Integer id) throws UserNotFoundException {
-		User user = null;
-		Optional optional = userRepo.findById(id);
+	public Boolean deleteByUserId(Integer id) throws UserNotFoundException {
 		if (!(userRepo.findById(id).isPresent())) {
 			throw new UserNotFoundException("User Doesn't Exists!!!!!!!!!!");
 		}
-		if (optional.isPresent()) {
-			user = userRepo.findById(id).get();
 			userRepo.deleteById(id);
-		}
-		return user;
+			return true;
 
 	}
-
 
 	public User saveUser(User user) throws UserExistsException {
 		User savedUser = userRepo.save(user);
@@ -83,23 +68,14 @@ public class UserServiceImpl implements UserService {
 //	    }
 //		return temp;
 //}
-	
-	public User updateByUserId( Integer id) throws UserNotFoundException {
 
-		User updatedUser = null;
-		
-		if (!(userRepo.findById(id).isPresent())) {
+	public User updateByUserId(Integer id,User user) throws UserNotFoundException {
+
+		Optional<User> tempUser = userRepo.findById(id);
+
+		if (!(tempUser.isPresent())) {
 			throw new UserNotFoundException("User Doesn't Exists!!!!!!!!!!");
 		}
-		
-		Optional optional = userRepo.findById(id);
-		if (optional.isPresent()) {
-			updatedUser = userRepo.findById(id).get();
-			updatedUser.setRole_id(updatedUser.getRole_id());
-			updatedUser.setCreated_date(updatedUser.getCreated_date());
-			updatedUser.setUpdate_date(updatedUser.getUpdate_date());
-			userRepo.save(updatedUser);
-		}
-		return updatedUser;
+		return userRepo.save(user);
 	}
 }
